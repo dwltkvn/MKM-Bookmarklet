@@ -35,7 +35,6 @@ function fetchCardPrices(num)
     var cardURL = cardLine.querySelector("td:nth-child(3) > div > div > a").getAttribute("href");
     var sellerPrice = cardLine.querySelector("td.st_price").innerText;
     sellerPrice = sellerPrice.substring( 0, sellerPrice.length -2 ).replace(',','.');
-    console.log(sellerPrice);
     var splat = cardURL.split('/');
     var cardName = splat[ splat.length-1 ].replace('-s','s');
 
@@ -55,8 +54,6 @@ function fetchCardPrices(num)
         var trendPrice2 = trendPrice.substring( 0, trendPrice.length -2 ).replace(',','.');
 
         var additionnalInfo = "";
-        console.log(parseFloat(sellerPrice));
-        console.log(parseFloat(trendPrice2));
         if( parseFloat(sellerPrice) <= parseFloat(trendPrice2) ) additionnalInfo = " [!!!] ";
 
         cardCommentElem.innerText = fromPrice + " | " + trendPrice + additionnalInfo;
