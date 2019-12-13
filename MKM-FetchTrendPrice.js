@@ -38,7 +38,7 @@ function fetchCardPrices(num)
     var splat = cardURL.split('/');
     var cardName = splat[ splat.length-1 ].replace('-s','s');
 
-    var cardCommentElem  = cardLine.querySelector(".product-comments > div > span");
+    var cardCommentElem  = cardLine.querySelector(".item-count");
     if(cardCommentElem.innerText.includes('|')) return;
     cardCommentElem.innerText = "... fetching ...";
 
@@ -54,7 +54,7 @@ function fetchCardPrices(num)
         var trendPrice2 = trendPrice.substring( 0, trendPrice.length -2 ).replace(',','.');
 
         var additionnalInfo = "";
-        if( parseFloat(sellerPrice) <= parseFloat(trendPrice2) ) additionnalInfo = " ![ "+ (parseFloat(trendPrice2)-parseFloat(sellerPrice)).toFixed(2) +" ] ";
+        if( parseFloat(sellerPrice) <= parseFloat(trendPrice2) ) additionnalInfo = " !["+ (parseFloat(trendPrice2)-parseFloat(sellerPrice)).toFixed(2) +"] ";
 
         cardCommentElem.innerText = fromPrice + " | " + trendPrice + additionnalInfo;
     })
@@ -82,7 +82,7 @@ for (i = 0; i < cardImgs.length; i++) {
     cardImgs[i].onmouseover = function() { fetchCardPrices(this.id) };
 }
 
-var cardUrls = document.querySelectorAll("table.fullWidth > tbody > tr > td > div > div > a");
+var cardUrls = document.querySelectorAll(".table-body > div > .col-sellerProductInfo > div > .col-seller > a ");
 var i = 0;
 for (i = 0; i < cardUrls.length; i++) {
     var currentUrl = cardUrls[i].getAttribute("href");
