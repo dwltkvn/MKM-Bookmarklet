@@ -54,7 +54,7 @@ function fetchCardPrices(num)
         var trendPrice2 = trendPrice.substring( 0, trendPrice.length -2 ).replace(',','.');
 
         var additionnalInfo = "";
-        if( parseFloat(sellerPrice) <= parseFloat(trendPrice2) ) additionnalInfo = " [!!!] ";
+        if( parseFloat(sellerPrice) <= parseFloat(trendPrice2) ) additionnalInfo = " ![ "+ (parseFloat(trendPrice2)-parseFloat(sellerPrice)).toFixed(2) +" ] ";
 
         cardCommentElem.innerText = fromPrice + " | " + trendPrice + additionnalInfo;
     })
@@ -64,10 +64,14 @@ function fetchCardPrices(num)
     });
 }
 
+var previousButton = document.querySelector("#MKMFetchButton");
+if(previousButton) previousButton.remove();
+
 var filterDiv = document.querySelector("#siteContents > div > div.filterBox");
 var fetchButton = document.createElement("input");
 fetchButton.setAttribute('type','button');
 fetchButton.setAttribute('value','fetch all');
+fetchButton.setAttribute('id','MKMFetchButton');
 fetchButton.onclick = function(){ fetchAll() };
 filterDiv.appendChild(fetchButton);
 
