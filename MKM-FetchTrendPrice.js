@@ -22,7 +22,7 @@ function closePricePopUp()
 
 function fetchAll()
 {
-    cardUrls = document.querySelectorAll("table.fullWidth > tbody > tr > td:nth-child(2) > span.icon");
+    cardUrls = document.querySelectorAll(".table-body > div > .col-thumbnail");
     var i = 0;
     for (i = 0; i < cardUrls.length; i++) {
         fetchCardPrices(i+1);
@@ -31,14 +31,14 @@ function fetchAll()
 
 function fetchCardPrices(num)
 {
-    var cardLine = document.querySelector("#bupPaginator\\.innerNavBarCodeDiv > table > tbody > tr:nth-child("+num+")");
-    var cardURL = cardLine.querySelector("td:nth-child(3) > div > div > a").getAttribute("href");
-    var sellerPrice = cardLine.querySelector("td.st_price").innerText;
+    var cardLine = document.querySelector(".table-body > div:nth-child("+num+")");
+    var cardURL = cardLine.querySelector(".col-seller > a").getAttribute("href");
+    var sellerPrice = cardLine.querySelector(".price-container > div > div > span").innerText;
     sellerPrice = sellerPrice.substring( 0, sellerPrice.length -2 ).replace(',','.');
     var splat = cardURL.split('/');
     var cardName = splat[ splat.length-1 ].replace('-s','s');
 
-    var cardCommentElem = cardLine.querySelector("td:nth-child(9) > div");
+    var cardCommentElem  = cardLine.querySelector(".product-comments > div > span");
     if(cardCommentElem.innerText.includes('|')) return;
     cardCommentElem.innerText = "... fetching ...";
 
@@ -67,7 +67,7 @@ function fetchCardPrices(num)
 var previousButton = document.querySelector("#MKMFetchButton");
 if(previousButton) previousButton.remove();
 
-var filterDiv = document.querySelector("#siteContents > div > div.filterBox");
+var filterDiv = document.querySelector(".w-100");
 var fetchButton = document.createElement("input");
 fetchButton.setAttribute('type','button');
 fetchButton.setAttribute('value','fetch all');
@@ -75,7 +75,7 @@ fetchButton.setAttribute('id','MKMFetchButton');
 fetchButton.onclick = function(){ fetchAll() };
 filterDiv.appendChild(fetchButton);
 
-var cardImgs = document.querySelectorAll("table.fullWidth > tbody > tr > td:nth-child(1) > input");
+var cardImgs = document.querySelectorAll(".table-body > div > .col-thumbnail");
 var i = 0;
 for (i = 0; i < cardImgs.length; i++) {
     cardImgs[i].setAttribute("id",i+1);
