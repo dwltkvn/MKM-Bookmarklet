@@ -75,7 +75,7 @@ fetchButton.setAttribute('id','MKMFetchButton');
 fetchButton.onclick = function(){ fetchAll() };
 filterDiv.appendChild(fetchButton);
 
-var cardImgs = document.querySelectorAll(".table-body > div > .col-thumbnail");
+var cardImgs = document.querySelectorAll(".table-body > div > .col-offer > .price-container");
 var i = 0;
 for (i = 0; i < cardImgs.length; i++) {
     cardImgs[i].setAttribute("id",i+1);
