@@ -1,8 +1,23 @@
+var saveData = (function () {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    return function (data, fileName) {
+        var json = JSON.stringify(data),
+            blob = new Blob([json], {type: "octet/stream"}),
+            url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+}());
+
 function highlightCart(username)
 {
 	if( localStorage.getItem("MKMPreviewCart") !== null )
 	{
-		arrayUID = JSON.parse( localStorage.getItem("MKMPreviewCart") );
+		var arrayUID = JSON.parse( localStorage.getItem("MKMPreviewCart") );
 		if(arrayUID[username] === undefined) return;
 		
 		Lines.forEach( (L) => {
@@ -21,7 +36,6 @@ function sendToCart(username,cardValue)
 	if( localStorage.getItem("MKMPreviewCart") !== null ) arrayUID = JSON.parse( localStorage.getItem("MKMPreviewCart") );
 	else arrayUID = {};
 	
-	//console.log(cardValue);
 	if(arrayUID[username] === undefined) arrayUID[username] = {};
 	arrayUID[username][cardName] = cardPrice;
 	localStorage.setItem( "MKMPreviewCart", JSON.stringify(arrayUID) );	
@@ -114,6 +128,18 @@ fetchButton.onclick = function () {
     fetchAll()
 };
 filterDiv.appendChild(fetchButton);
+var saveButton = document.createElement("input");
+saveButton.setAttribute('type', 'button');
+saveButton.setAttribute('value', 'Preview Cart');
+saveButton.setAttribute('id', 'MKMSaveButton');
+saveButton.onclick = function () {
+    if( localStorage.getItem("MKMPreviewCart") !== null )
+	{
+		var arrayUID = JSON.parse( localStorage.getItem("MKMPreviewCart") );
+		saveData(arrayUID, 'MKMPreviewCart.json');
+	}
+};
+filterDiv.appendChild(saveButton);
 var cardImgs = document.querySelectorAll(".table-body > div > .col-offer > .price-container");
 var i = 0;
 for (i = 0;
@@ -135,22 +161,18 @@ for (i = 0;
     };
 }
 
-// --- add preview cart button + --- //
+
 var userName = document.querySelector("h1").innerText.split('\n')[0];
 var Lines = document.querySelectorAll(".table-body > div");
 highlightCart(userName);
 
-// add a + button for each line
 Lines.forEach( (L) => {
 	
 	var cardURL = L.querySelector(".col-seller > a").innerText;
 	var cardName = L.querySelector(".col-seller").innerText;
 	var sellerPrice = L.querySelector(".price-container > div > div > span").innerText;
 	sellerPrice = sellerPrice.substring(0 , sellerPrice.length - 2).replace(',' , '.');
-	
-	//console.log(sellerPrice + ' ' + cardName);
-	
-	// for each Line, goto div containing button
+
 	L.querySelectorAll('div.col-offer > div.actions-container > div.input-group').forEach( (e) => {			
 		var btn = document.createElement("button");
 		btn.onclick = function () {
