@@ -37,7 +37,6 @@ function removeFromCart(username,cardValue)
 	else return;
 	
 	if(arrayUID[username] === undefined) return;
-	//arrayUID[username][cardName] = {};
 	delete arrayUID[username][cardName];
 	localStorage.setItem( "MKMPreviewCart", JSON.stringify(arrayUID) );	
 	
@@ -144,8 +143,7 @@ Lines.forEach( (L) => {
 	var sellerPrice = L.querySelector(".price-container > div > div > span").innerText;
 	sellerPrice = sellerPrice.substring(0 , sellerPrice.length - 2).replace(',' , '.');
 
-	L.querySelectorAll('div.col-offer > div.actions-container > div.input-group').forEach( (e) => {	
-
+	L.querySelectorAll('div.col-checkbox').forEach( (e) => {
 		var btnRem = document.createElement("button");
 		btnRem.onclick = function () {
 			removeFromCart(userName, this.value);
