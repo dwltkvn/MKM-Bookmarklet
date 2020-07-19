@@ -1,3 +1,32 @@
+function highlightCart(username)
+{
+	if( localStorage.getItem("MKMPreviewCart") !== null )
+	{
+		arrayUID = JSON.parse( localStorage.getItem("MKMPreviewCart") );
+		if(arrayUID[username] === undefined) return;
+		
+		Lines.forEach( (L) => {
+			var cardName = L.querySelector(".col-seller").innerText;
+			if(arrayUID[username][cardName] !== undefined) L.style.backgroundColor='yellow';
+		} )
+	}
+}
+
+function sendToCart(username,cardValue)
+{
+	var cardName = cardValue.split(':')[0];
+	var cardPrice = cardValue.split(':')[1];
+	
+	var arrayUID;
+	if( localStorage.getItem("MKMPreviewCart") !== null ) arrayUID = JSON.parse( localStorage.getItem("MKMPreviewCart") );
+	else arrayUID = {};
+	
+	//console.log(cardValue);
+	if(arrayUID[username] === undefined) arrayUID[username] = {};
+	arrayUID[username][cardName] = cardPrice;
+	localStorage.setItem( "MKMPreviewCart", JSON.stringify(arrayUID) );	
+}
+
 function openPricePopUp(link) {
     closePricePopUp();
     var myFloatingDiv = document.createElement("div");
@@ -105,3 +134,34 @@ for (i = 0;
         openPricePopUp(this.href)
     };
 }
+
+// --- add preview cart button + --- //
+var userName = document.querySelector("h1").innerText.split('\n')[0];
+var Lines = document.querySelectorAll(".table-body > div");
+highlightCart(userName);
+
+// add a + button for each line
+Lines.forEach( (L) => {
+	
+	var cardURL = L.querySelector(".col-seller > a").innerText;
+	var cardName = L.querySelector(".col-seller").innerText;
+	var sellerPrice = L.querySelector(".price-container > div > div > span").innerText;
+	sellerPrice = sellerPrice.substring(0 , sellerPrice.length - 2).replace(',' , '.');
+	
+	//console.log(sellerPrice + ' ' + cardName);
+	
+	// for each Line, goto div containing button
+	L.querySelectorAll('div.col-offer > div.actions-container > div.input-group').forEach( (e) => {			
+		var btn = document.createElement("button");
+		btn.onclick = function () {
+			sendToCart(userName, this.value);
+			highlightCart(userName);
+		};
+		var textnode = document.createTextNode("+");
+		btn.appendChild(textnode); 
+		btn.setAttribute('class','btn btn-primary btn-sm rounded');
+		btn.setAttribute('type','button');
+		btn.setAttribute('value',cardName+':'+sellerPrice);
+		e.appendChild(btn);
+	} )
+} );
