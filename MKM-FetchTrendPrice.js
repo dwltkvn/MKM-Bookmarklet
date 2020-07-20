@@ -104,7 +104,7 @@ function fetchCardPrices(num) {
     });
 }
 
-var previousButton = document.querySelector("#MKMFetchButton");
+var previousButton = document.querySelector("#MKMSaveButton");
 if (previousButton)
     previousButton.remove();
 var filterDiv = document.querySelector(".w-100");
@@ -132,6 +132,7 @@ for (i = 0;
     };
 }
 
+document.querySelectorAll('.table-body > div > div.col-checkbox > button').forEach( (e) => { e.remove(); } );
 var userName = document.querySelector("h1").innerText.split('\n')[0];
 var Lines = document.querySelectorAll(".table-body > div");
 highlightCart(userName);
@@ -143,6 +144,11 @@ Lines.forEach( (L) => {
 	var sellerPrice = L.querySelector(".price-container > div > div > span").innerText;
 	sellerPrice = sellerPrice.substring(0 , sellerPrice.length - 2).replace(',' , '.');
 
+	var btnType='primary';
+	if( typeof(kdoCardList) == 'undefined') btnType='light';
+	if( typeof(kdoCardList) != 'undefined' && kdoCardList.includes(cardURL) ) btnType='secondary';
+
+	
 	L.querySelectorAll('div.col-checkbox').forEach( (e) => {
 		var btnRem = document.createElement("button");
 		btnRem.onclick = function () {
@@ -151,7 +157,7 @@ Lines.forEach( (L) => {
 		};
 		var textnode = document.createTextNode("-");
 		btnRem.appendChild(textnode); 
-		btnRem.setAttribute('class','btn btn-primary btn-sm rounded');
+		btnRem.setAttribute('class','btn btn-'+btnType+' btn-sm rounded');
 		btnRem.setAttribute('type','button');
 		btnRem.setAttribute('value',cardName+':'+sellerPrice);
 		e.appendChild(btnRem);
@@ -163,7 +169,7 @@ Lines.forEach( (L) => {
 		};
 		var textnode = document.createTextNode("+");
 		btn.appendChild(textnode); 
-		btn.setAttribute('class','btn btn-primary btn-sm rounded');
+		btn.setAttribute('class','btn btn-'+btnType+' btn-sm rounded');
 		btn.setAttribute('type','button');
 		btn.setAttribute('value',cardName+':'+sellerPrice);
 		e.appendChild(btn);
