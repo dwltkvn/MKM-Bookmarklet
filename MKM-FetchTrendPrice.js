@@ -15,6 +15,7 @@ var saveData = (function () {
 
 function highlightCart(username)
 {
+	var color = ['yellow', 'orange', 'red' ];
 	if( localStorage.getItem("MKMPreviewCart") !== null )
 	{
 		var arrayUID = JSON.parse( localStorage.getItem("MKMPreviewCart") );
@@ -22,7 +23,13 @@ function highlightCart(username)
 		
 		Lines.forEach( (L) => {
 			var cardName = L.querySelector(".col-seller").innerText;
-			if(arrayUID[username][cardName] !== undefined) L.style.backgroundColor='yellow';
+			if(arrayUID[username][cardName] !== undefined)
+			{
+				if(arrayUID[username][cardName].hasOwnProperty('priority'))
+					L.style.backgroundColor=color[ arrayUID[username][cardName].priority ];
+				else
+					L.style.backgroundColor='gold';
+			}
 		} )
 	}
 }
@@ -56,7 +63,15 @@ function sendToCart(username,cardValue)
 	else arrayUID = {};
 	
 	if(arrayUID[username] === undefined) arrayUID[username] = {};
-	arrayUID[username][cardName] = cardPrice;
+	if(arrayUID[username][cardName] === undefined)
+	{
+		arrayUID[username][cardName] = { "price":cardPrice, "priority":0 };
+	}
+	else
+	{
+		arrayUID[username][cardName].priority = arrayUID[username][cardName].priority+1;
+		if(arrayUID[username][cardName].priority >= 3 ) arrayUID[username][cardName].priority = 0;
+	}
 	localStorage.setItem( "MKMPreviewCart", JSON.stringify(arrayUID) );	
 }
 
