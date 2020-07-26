@@ -26,9 +26,13 @@ function highlightCart(username)
 			if(arrayUID[username][cardName] !== undefined)
 			{
 				if(arrayUID[username][cardName].hasOwnProperty('priority'))
+				{
 					L.style.backgroundColor=color[ arrayUID[username][cardName].priority ];
+				}
 				else
+				{
 					L.style.backgroundColor='gold';
+				}
 			}
 		} )
 	}
