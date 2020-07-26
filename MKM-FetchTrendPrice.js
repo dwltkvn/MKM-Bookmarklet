@@ -123,9 +123,14 @@ function fetchCardPrices(num) {
     });
 }
 
-var previousButton = document.querySelector("#MKMSaveButton");
-if (previousButton)
-    previousButton.remove();
+if (document.querySelector("#MKMSaveButton")) document.querySelector("#MKMSaveButton").remove();
+if (document.querySelector("#MKMSelectComboBox")) document.querySelector("#MKMSelectComboBox").remove();
+if (document.querySelector("#MKMTextArea1")) document.querySelector("#MKMTextArea1").remove();
+if (document.querySelector("#MKMTextArea2")) document.querySelector("#MKMTextArea2").remove();
+if (document.querySelector("#MKMTextArea3")) document.querySelector("#MKMTextArea3").remove();
+if (document.querySelector("#MKMAHREF")) document.querySelector("#MKMAHREF").remove();
+if (document.querySelector("#MKMClearListButton")) document.querySelector("#MKMClearListButton").remove();
+if (document.querySelector("#MKMAddListButton")) document.querySelector("#MKMAddListButton").remove();
 var filterDiv = document.querySelector(".w-100");
 
 var saveButton = document.createElement("input");
@@ -139,7 +144,105 @@ saveButton.onclick = function () {
 		saveData(arrayUID, 'MKMPreviewCart.json');
 	}
 };
+
+var textArea1 = document.createElement("textarea");
+textArea1.setAttribute('id', 'MKMTextArea1');
+textArea1.setAttribute('cols',"50");
+textArea1.setAttribute('rows',"1");
+var textArea2 = document.createElement("textarea");
+textArea2.setAttribute('id', 'MKMTextArea2');
+textArea2.setAttribute('cols',"50");
+textArea2.setAttribute('rows',"1");
+var textArea3 = document.createElement("textarea");
+textArea3.setAttribute('id', 'MKMTextArea3');
+textArea3.setAttribute('cols',"50");
+textArea3.setAttribute('rows',"1");
+var aLink = document.createElement("A");
+aLink.setAttribute('id', 'MKMAHREF');
+aLink.href='http://www.listdiff.com/compare-2-lists-difference-tool';
+aLink.text='listDiff';
+
+var arrayUID;
+if( localStorage.getItem("MKMPreviewCart") !== null ) arrayUID = JSON.parse( localStorage.getItem("MKMPreviewCart") );
+var selectComboBox = document.createElement("SELECT");
+selectComboBox.setAttribute('id', 'MKMSelectComboBox');
+Object.keys(arrayUID).forEach( sellerName => {
+	var option = document.createElement("option");
+	option.text = sellerName + ' (' + Object.keys( arrayUID[sellerName] ).length + ')';
+	selectComboBox.add(option);
+})
+selectComboBox.onchange = function(e) {
+	console.log(e);
+	var idx = e.target.options.selectedIndex;
+	
+	//textArea2.value = arrayUID
+	var sellerName = Object.keys(arrayUID)[idx];
+	var cardsList = Object.keys(arrayUID[sellerName]);
+	textArea2.value = cardsList.join('\n');
+	var cardsTextList = [sellerName];
+	var cardsTextListP = [];
+	cardsTextListP[0] = [];
+	cardsTextListP[1] = [];
+	cardsTextListP[2] = [];
+	cardsList.forEach( card => {
+		var cardObject = arrayUID[sellerName][card];
+		if(cardObject.hasOwnProperty('priority'))
+		{
+			cardsTextListP[cardObject.priority].push(card + ' | ' + cardObject.price + ' | ' + cardObject.priority);
+		}
+		else
+		{
+			cardsTextList.push(card + ' | ' + cardObject);
+		}
+	});
+	console.log(cardsTextListP);
+	//if(arrayUID[username][cardName].hasOwnProperty('priority'))
+	textArea1.value = cardsTextList.join('\n') + cardsTextListP[2].join('\n') + cardsTextListP[1].join('\n') + cardsTextListP[0].join('\n');
+}
+
+var clrListButton = document.createElement("input");
+clrListButton.setAttribute('type', 'button');
+clrListButton.setAttribute('value', 'Clear');
+clrListButton.setAttribute('id', 'MKMClearListButton');
+clrListButton.onclick = function () {
+    if( localStorage.getItem("MKMSellerList") !== null )
+	{
+		localStorage.removeItem("MKMSellerList");
+		textArea3.value = "";
+	}
+};
+
+var addListButton = document.createElement("input");
+addListButton.setAttribute('type', 'button');
+addListButton.setAttribute('value', 'Add');
+addListButton.setAttribute('id', 'MKMAddListButton');
+addListButton.onclick = function () {
+	
+	document.querySelectorAll('.table-body > div > div.col-checkbox > button').forEach( (e) => { e.remove(); } );
+	var Lines = document.querySelectorAll(".table-body > div");
+	var cardsList = {};
+	if( localStorage.getItem("MKMSellerList") !== null )
+	{
+		cardsList = JSON.parse( localStorage.getItem("MKMSellerList") );
+	}
+	Lines.forEach( (L) => {
+		var cardName = L.querySelector(".col-seller").innerText;
+		cardsList[cardName] = {};
+	});
+	textArea3.value = Object.keys(cardsList).join('\n');
+	localStorage.setItem( "MKMSellerList", JSON.stringify(cardsList) );	
+};
+
 filterDiv.appendChild(saveButton);
+filterDiv.appendChild(selectComboBox);
+filterDiv.appendChild(textArea1);
+filterDiv.appendChild(textArea2);
+filterDiv.appendChild(document.createElement("BR"));
+filterDiv.appendChild(textArea3);
+filterDiv.appendChild(addListButton);
+filterDiv.appendChild(clrListButton);
+filterDiv.appendChild(aLink);
+
 var cardImgs = document.querySelectorAll(".table-body > div > .col-offer > .price-container");
 var i = 0;
 for (i = 0;
