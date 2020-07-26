@@ -123,14 +123,14 @@ function fetchCardPrices(num) {
     });
 }
 
-if (document.querySelector("#MKMSaveButton")) document.querySelector("#MKMSaveButton").remove();
-if (document.querySelector("#MKMSelectComboBox")) document.querySelector("#MKMSelectComboBox").remove();
-if (document.querySelector("#MKMTextArea1")) document.querySelector("#MKMTextArea1").remove();
-if (document.querySelector("#MKMTextArea2")) document.querySelector("#MKMTextArea2").remove();
-if (document.querySelector("#MKMTextArea3")) document.querySelector("#MKMTextArea3").remove();
-if (document.querySelector("#MKMAHREF")) document.querySelector("#MKMAHREF").remove();
-if (document.querySelector("#MKMClearListButton")) document.querySelector("#MKMClearListButton").remove();
-if (document.querySelector("#MKMAddListButton")) document.querySelector("#MKMAddListButton").remove();
+if (document.querySelector("#MKMSaveButton")){ document.querySelector("#MKMSaveButton").remove(); }
+if (document.querySelector("#MKMSelectComboBox")){ document.querySelector("#MKMSelectComboBox").remove(); }
+if (document.querySelector("#MKMTextArea1")){ document.querySelector("#MKMTextArea1").remove(); }
+if (document.querySelector("#MKMTextArea2")){ document.querySelector("#MKMTextArea2").remove(); }
+if (document.querySelector("#MKMTextArea3")){ document.querySelector("#MKMTextArea3").remove(); }
+if (document.querySelector("#MKMAHREF")){ document.querySelector("#MKMAHREF").remove(); }
+if (document.querySelector("#MKMClearListButton")){ document.querySelector("#MKMClearListButton").remove(); }
+if (document.querySelector("#MKMAddListButton")){ document.querySelector("#MKMAddListButton").remove(); }
 var filterDiv = document.querySelector(".w-100");
 
 var saveButton = document.createElement("input");
@@ -163,19 +163,17 @@ aLink.href='http://www.listdiff.com/compare-2-lists-difference-tool';
 aLink.text='listDiff';
 
 var arrayUID;
-if( localStorage.getItem("MKMPreviewCart") !== null ) arrayUID = JSON.parse( localStorage.getItem("MKMPreviewCart") );
+if( localStorage.getItem("MKMPreviewCart") !== null ){ arrayUID = JSON.parse( localStorage.getItem("MKMPreviewCart") ); }
 var selectComboBox = document.createElement("SELECT");
 selectComboBox.setAttribute('id', 'MKMSelectComboBox');
 Object.keys(arrayUID).forEach( sellerName => {
 	var option = document.createElement("option");
 	option.text = sellerName + ' (' + Object.keys( arrayUID[sellerName] ).length + ')';
 	selectComboBox.add(option);
-})
+});
 selectComboBox.onchange = function(e) {
 	console.log(e);
 	var idx = e.target.options.selectedIndex;
-	
-	//textArea2.value = arrayUID
 	var sellerName = Object.keys(arrayUID)[idx];
 	var cardsList = Object.keys(arrayUID[sellerName]);
 	textArea2.value = cardsList.join('\n');
@@ -195,10 +193,8 @@ selectComboBox.onchange = function(e) {
 			cardsTextList.push(card + ' | ' + cardObject);
 		}
 	});
-	console.log(cardsTextListP);
-	//if(arrayUID[username][cardName].hasOwnProperty('priority'))
-	textArea1.value = cardsTextList.join('\n') + cardsTextListP[2].join('\n') + cardsTextListP[1].join('\n') + cardsTextListP[0].join('\n');
-}
+	textArea1.value = cardsTextList.join('\n') +'\n'+ cardsTextListP[2].join('\n') +'\n'+ cardsTextListP[1].join('\n') +'\n'+ cardsTextListP[0].join('\n');
+};
 
 var clrListButton = document.createElement("input");
 clrListButton.setAttribute('type', 'button');
