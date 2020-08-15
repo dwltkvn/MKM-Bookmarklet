@@ -15,7 +15,7 @@ var saveData = (function () {
 
 function highlightCart(username)
 {
-	var color = ['yellow', 'orange', 'red' ];
+	var color = ['yellow', 'orange', 'red' , 'Gray', 'Indigo' ];
 	if( localStorage.getItem("MKMPreviewCart") !== null )
 	{
 		var arrayUID = JSON.parse( localStorage.getItem("MKMPreviewCart") );
@@ -74,7 +74,7 @@ function sendToCart(username,cardValue)
 	else
 	{
 		arrayUID[username][cardName].priority = arrayUID[username][cardName].priority+1;
-		if(arrayUID[username][cardName].priority >= 3 ) arrayUID[username][cardName].priority = 0;
+		if(arrayUID[username][cardName].priority >= 5 ) arrayUID[username][cardName].priority = 0;
 	}
 	localStorage.setItem( "MKMPreviewCart", JSON.stringify(arrayUID) );	
 }
